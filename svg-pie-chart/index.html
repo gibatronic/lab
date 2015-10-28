@@ -19,13 +19,36 @@
       }
 
       body {
+        position: relative;
         margin: 0;
+        min-width: 50rem;
       }
 
       html {
-        background-color: rgb(236, 240, 241);
         font-family: sans-serif;
         font-size: 16px;
+      }
+
+      #content {
+        position: absolute;
+        top: 1rem;
+        right: calc(30% + 1rem);
+        bottom: 1rem;
+        left: 1rem;
+        background-color: rgb(236, 240, 241);
+        overflow: auto;
+        width: auto;
+        height: auto;
+      }
+
+      #disqus_thread {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        left: 70%;
+        width: auto;
+        height: auto;
       }
 
       @keyframes progress-spin {
@@ -62,22 +85,53 @@
     </style>
   </head>
   <body>
-    <svg id="progress" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100" role="progressbar" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <defs>
-        <path id="progrss-half-left" d="M50,0 C22.3857625,0 0,22.3857625 0,50 C0,77.6142375 22.3857625,100 50,100 L50,0 L50,0 Z"></path>
-        <path id="progrss-half-right" d="M0,0 C27.6142375,0 50,22.3857625 50,50 C50,77.6142375 27.6142375,100 0,100 L0,0 L0,0 Z"></path>
-      </defs>
+    <main id="content">
+      <svg id="progress" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100" role="progressbar" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+          <path id="progrss-half-left" d="M50,0 C22.3857625,0 0,22.3857625 0,50 C0,77.6142375 22.3857625,100 50,100 L50,0 L50,0 Z"></path>
+          <path id="progrss-half-right" d="M0,0 C27.6142375,0 50,22.3857625 50,50 C50,77.6142375 27.6142375,100 0,100 L0,0 L0,0 Z"></path>
+        </defs>
 
-      <mask id="progrss-mask-left" fill="rgb(255, 255, 255)">
-        <use id="progress-left" x="0" y="0" xlink:href="#progrss-half-left" class="progress-sides"></use>
-      </mask>
+        <mask id="progrss-mask-left" fill="rgb(255, 255, 255)">
+          <use id="progress-left" x="0" y="0" xlink:href="#progrss-half-left" class="progress-sides"></use>
+        </mask>
 
-      <mask id="progrss-mask-right" fill="rgb(255, 255, 255)">
-        <use id="progress-right" x="50" y="0" xlink:href="#progrss-half-right" class="progress-sides"></use>
-      </mask>
+        <mask id="progrss-mask-right" fill="rgb(255, 255, 255)">
+          <use id="progress-right" x="50" y="0" xlink:href="#progrss-half-right" class="progress-sides"></use>
+        </mask>
 
-      <rect fill="rgb(231, 76, 60)" mask="url(#progrss-mask-left)" x="0" y="0" width="50" height="100"></rect>
-      <rect fill="rgb(231, 76, 60)" mask="url(#progrss-mask-right)" x="50" y="0" width="50" height="100"></rect>
-    </svg>
+        <rect fill="rgb(231, 76, 60)" mask="url(#progrss-mask-left)" x="0" y="0" width="50" height="100"></rect>
+        <rect fill="rgb(231, 76, 60)" mask="url(#progrss-mask-right)" x="50" y="0" width="50" height="100"></rect>
+      </svg>
+    </main>
+
+    <aside id="disqus_thread" hidden></aside>
+
+    <script>
+      !function() {
+        window.disqus_config = function() {
+          var pathname = location.pathname;
+
+          this.page.url = '//' + location.host + pathname;
+          this.page.identifier = pathname.replace(/\//g, '-');
+        };
+
+        var main = function() {
+          var script = document.createElement('script');
+
+          script.addEventListener('load', show);
+          script.setAttribute('data-timestamp', Date.now());
+          script.setAttribute('src', '//gibatronic-lab.disqus.com/embed.js');
+
+          document.body.appendChild(script);
+        };
+
+        var show = function() {
+          document.querySelector('#disqus_thread').removeAttribute('hidden');
+        };
+
+        document.addEventListener('DOMContentLoaded', main);
+      }();
+    </script>
   </body>
 </html>
