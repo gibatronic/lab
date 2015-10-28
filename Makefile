@@ -8,4 +8,7 @@ index:
 			 -o index.html \
 			 -s http://127.0.0.1/lab/ \
 			 && echo done \
-			 || echo fail
+			 || echo fail; \
+	sed -i '' \
+	    's/<\/head>/<link href="\/lab\/icon.png" rel="icon" type="image\/png"><\/head>/' \
+	    index.html
