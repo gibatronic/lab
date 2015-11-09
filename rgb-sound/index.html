@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>RGB Sound</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/lab/icon.png" rel="icon" type="image/png">
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body, html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        position: relative;
+        margin: 0;
+        min-width: 50rem;
+      }
+
+      html {
+        font-family: sans-serif;
+        font-size: 16px;
+      }
+
+      input {
+        margin: 0;
+      }
+
+      #content {
+        position: absolute;
+        top: 1rem;
+        right: calc(30% + 1rem);
+        bottom: 1rem;
+        left: 1rem;
+        background-color: rgb(236, 240, 241);
+        overflow: auto;
+        width: auto;
+        height: auto;
+      }
+
+      #disqus_thread {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        left: 70%;
+        width: auto;
+        height: auto;
+      }
+
+      .box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .color__label {
+        font-family: monospace;
+      }
+
+      .color__play {
+        border: 0;
+        border-radius: 1rem;
+        cursor: pointer;
+        font-size: 2rem;
+        outline: 0;
+        width: 9rem;
+        height: 9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="content">
+      <div class="box">
+        <div class="color">
+          <label for="color-red" class="color__label">R</label>
+          <input id="color-red" type="range" min="0" max="255" value="231" step="1" class="color__slider">
+        </div>
+
+        <div class="color">
+          <label for="color-green" class="color__label">G</label>
+          <input id="color-green" type="range" min="0" max="255" value="76" step="1" class="color__slider">
+        </div>
+
+        <div class="color">
+          <label for="color-blue" class="color__label">B</label>
+          <input id="color-blue" type="range" min="0" max="255" value="60" step="1" class="color__slider">
+        </div>
+
+        <button id="color-play" class="color__play">&#9658;</button>
+      </div>
+    </main>
+
+    <aside id="disqus_thread" hidden></aside>
+
+    <script>
+      !function() {
+        var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        var beepBase = 200;
+        var beepLength = 0.3;
+        var beepMultiplier = 1000;
+        var beepVolume = 0.2;
+        var colors = { };
+        var gain = audioContext.createGain();
+
+        window.disqus_config = function() {
+          var pathname = location.pathname;
+
+          this.page.url = '//' + location.host + pathname;
+          this.page.identifier = pathname.replace(/\//g, '-');
+        };
+
+        var bind = function() {
+          colors.blue.addEventListener('change', update);
+          colors.green.addEventListener('change', update);
+          colors.play.addEventListener('click', play);
+          colors.red.addEventListener('change', update);
+        };
+
+        var cache = function() {
+          colors.blue = document.querySelector('#color-blue');
+          colors.green = document.querySelector('#color-green');
+          colors.play = document.querySelector('#color-play');
+          colors.red = document.querySelector('#color-red');
+        };
+
+        var loadDisqus = function() {
+          var script = document.createElement('script');
+
+          script.addEventListener('load', showDisqus);
+          script.setAttribute('data-timestamp', Date.now());
+          script.setAttribute('src', '//gibatronic-lab.disqus.com/embed.js');
+
+          document.body.appendChild(script);
+        };
+
+        var main = function() {
+          setup();
+          cache();
+          bind();
+          update();
+          loadDisqus();
+        };
+
+        var play = function() {
+          var blue = colors.blue.value / 255;
+          var currentTime = audioContext.currentTime;
+          var green = colors.green.value / 255;
+          var red = colors.red.value / 255;
+
+          gain.gain.cancelScheduledValues(currentTime);
+          gain.gain.setValueAtTime(beepVolume, currentTime);
+          gain.gain.linearRampToValueAtTime(0, currentTime + beepLength);
+
+          [red, green, blue].forEach(playToken);
+        };
+
+        var playToken = function(token, index) {
+          var currentTime = audioContext.currentTime;
+          var offset = index * 0.025;
+          var oscillator = audioContext.createOscillator();
+
+          oscillator.type = 'sine';
+          oscillator.frequency.value = (token * beepMultiplier) + beepBase;
+          oscillator.connect(gain);
+          oscillator.start(currentTime + offset);
+          oscillator.stop(currentTime + offset + beepLength);
+        };
+
+        var setup = function() {
+          gain.connect(audioContext.destination);
+        };
+
+        var showDisqus = function() {
+          document.querySelector('#disqus_thread').removeAttribute('hidden');
+        };
+
+        var update = function() {
+          var blue = colors.blue.value;
+          var green = colors.green.value;
+          var red = colors.red.value;
+
+          colors.play.style.backgroundColor = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+        };
+
+        document.addEventListener('DOMContentLoaded', main);
+      }();
+    </script>
+  </body>
+</html>
