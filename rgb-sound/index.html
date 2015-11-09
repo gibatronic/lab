@@ -113,13 +113,6 @@
         var colors = { };
         var gain = audioContext.createGain();
 
-        window.disqus_config = function() {
-          var pathname = location.pathname;
-
-          this.page.url = '//' + location.host + pathname;
-          this.page.identifier = pathname.replace(/\//g, '-');
-        };
-
         var bind = function() {
           colors.blue.addEventListener('change', update);
           colors.green.addEventListener('change', update);
@@ -132,6 +125,13 @@
           colors.green = document.querySelector('#color-green');
           colors.play = document.querySelector('#color-play');
           colors.red = document.querySelector('#color-red');
+        };
+
+        window.disqus_config = function() {
+          var pathname = location.pathname;
+
+          this.page.url = 'https://' + location.host + location.pathname;
+          this.page.identifier = pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-');
         };
 
         var loadDisqus = function() {

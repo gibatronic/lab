@@ -114,8 +114,8 @@
         window.disqus_config = function() {
           var pathname = location.pathname;
 
-          this.page.url = '//' + location.host + pathname;
-          this.page.identifier = pathname.replace(/\//g, '-');
+          this.page.url = 'https://' + location.host + location.pathname;
+          this.page.identifier = pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-');
         };
 
         var main = function() {
