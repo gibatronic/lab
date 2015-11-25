@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Lottery Raffle</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/lab/icon.png" rel="icon" type="image/png">
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body, html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        position: relative;
+        margin: 0;
+        min-width: 50rem;
+      }
+
+      html {
+        font-family: sans-serif;
+        font-size: 16px;
+      }
+
+      #content {
+        position: absolute;
+        top: 1rem;
+        right: calc(30% + 1rem);
+        bottom: 1rem;
+        left: 1rem;
+        background-color: rgb(236, 240, 241);
+        overflow: auto;
+        width: auto;
+        height: auto;
+      }
+
+      #disqus_thread {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        left: 70%;
+        width: auto;
+        height: auto;
+      }
+
+      .numbers {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-spacing: 0.25rem;
+        transform: translate(-50%, -50%);
+      }
+
+      .numbers__footer {
+        font-size: 0.75rem;
+      }
+
+      .numbers__cell {
+        color: rgb(189, 195, 199);
+        padding: 0.5rem;
+        text-align: center;
+      }
+
+      .numbers__cell--chosen {
+        background-color: rgb(44, 62, 80);
+        border-radius: 50%;
+        color: rgb(255, 255, 255);
+      }
+
+      .numbers__cell--footer {
+        font-size: 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="content"></main>
+
+    <aside id="disqus_thread" hidden></aside>
+
+    <script>
+      !function() {
+        window.disqus_config = function() {
+          var pathname = location.pathname;
+
+          this.page.url = 'https://' + location.host + location.pathname;
+          this.page.identifier = pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-');
+        };
+
+        var raffle = function() {
+          var numbers = [ ];
+
+          do {
+            var number = new Uint8ClampedArray(1);
+
+            crypto.getRandomValues(number);
+            number = number[0];
+
+            if (number > 59 || ~numbers.indexOf(number)) {
+              continue;
+            }
+
+            numbers.push(number + 1);
+          } while (numbers.length < 6);
+
+          return numbers;
+        };
+
+        var render = function(data) {
+          var column;
+          var index;
+          var row;
+          var td;
+          var tr;
+
+          var tbody = document.createElement('tbody');
+          tbody.classList.add('numbers__lists');
+
+          td = document.createElement('td');
+          td.classList.add('numbers__cell', 'numbers__cell--footer');
+          td.setAttribute('colspan', 10);
+          td.innerHTML = 'Consider sharing the prize with me if you win using this numbers. ☺';
+
+          tr = document.createElement('tr');
+          tr.appendChild(td);
+
+          var tfoot = document.createElement('tfoot');
+          tfoot.appendChild(tr);
+
+          var table = document.createElement('table');
+          table.classList.add('numbers');
+          table.appendChild(tbody);
+          table.appendChild(tfoot);
+
+          for (row = 0; row < 6; row++) {
+            tr = document.createElement('tr');
+            tr.classList.add('numbers__list');
+
+            for (column = 0; column < 10; column++) {
+              index = row * 10 + column + 1;
+              td = document.createElement('td');
+              td.classList.add('numbers__cell');
+              td.textContent = index;
+
+              var chosen = ~data.indexOf(index);
+
+              if (chosen) {
+                td.classList.add('numbers__cell--chosen');
+              }
+
+              tr.appendChild(td);
+            }
+
+            tbody.appendChild(tr);
+          }
+
+          document.querySelector('#content').appendChild(table);
+        };
+
+        var main = function() {
+          render(raffle());
+
+          var script = document.createElement('script');
+
+          script.addEventListener('load', show);
+          script.setAttribute('data-timestamp', Date.now());
+          script.setAttribute('src', '//gibatronic-lab.disqus.com/embed.js');
+
+          document.body.appendChild(script);
+        };
+
+        var show = function() {
+          document.querySelector('#disqus_thread').removeAttribute('hidden');
+        };
+
+        document.addEventListener('DOMContentLoaded', main);
+      }();
+    </script>
+  </body>
+</html>
