@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Honeycomb</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/lab/icon.png" rel="icon" type="image/png">
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body, html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        position: relative;
+        margin: 0;
+        min-width: 50rem;
+      }
+
+      html {
+        font-family: sans-serif;
+        font-size: 16px;
+      }
+
+      #content {
+        position: absolute;
+        top: 1rem;
+        right: calc(30% + 1rem);
+        bottom: 1rem;
+        left: 1rem;
+        background-color: rgb(236, 240, 241);
+        overflow: auto;
+        width: auto;
+        height: auto;
+      }
+
+      #disqus_thread {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        left: 70%;
+        width: auto;
+        height: auto;
+      }
+
+      .hexagon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: rgb(13, 13, 13);
+        -webkit-clip-path: polygon(100% 50%, 75% 93.30127%, 25% 93.30127%, 0 50%, 25% 6.69873%, 75% 6.69873%);
+        clip-path: polygon(100% 50%, 75% 93.30127%, 25% 93.30127%, 0 50%, 25% 6.69873%, 75% 6.69873%);
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .hexagons {
+        background-image: linear-gradient(to right, rgb(142, 68, 173) 0%, rgb(41, 128, 185) 100%);
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="content" class="hexagons"></main>
+
+    <aside id="disqus_thread" hidden></aside>
+
+    <script>
+      !function() {
+        var $ = function(selectors) {
+          return document.querySelector(selectors);
+        }
+
+        var cache = function() {
+          cache.hexagons = $('.hexagons');
+        };
+
+        var disqus = function() {
+          var script = document.createElement('script');
+
+          script.addEventListener('load', show);
+          script.setAttribute('data-timestamp', Date.now());
+          script.setAttribute('src', '//gibatronic-lab.disqus.com/embed.js');
+
+          document.body.appendChild(script);
+        };
+
+        window.disqus_config = function() {
+          var pathname = location.pathname;
+
+          this.page.url = 'https://' + location.host + location.pathname;
+          this.page.identifier = pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-');
+        };
+
+        var Hexagon = function(x, y) {
+          this.element = document.createElement('div');
+
+          this.element.classList.add('hexagon');
+          this.element.style.transform = 'translate(' + (x - 8) + 'px, ' + (y - 8) + 'px)';
+
+          cache.hexagons.appendChild(this.element);
+        };
+
+        var main = function() {
+          cache();
+          watch();
+          disqus();
+        };
+
+        var render = function() {
+          while (cache.hexagons.lastChild) {
+            cache.hexagons.removeChild(cache.hexagons.lastChild);
+          }
+
+          console.log(cache.width, cache.height);
+
+          var column;
+          var columns = Math.ceil(cache.width / 28) + 1;
+          var row;
+          var rows = Math.ceil(cache.height / 8) + 1;
+          var x;
+          var y;
+
+          for (row = 0; row < rows; row++) {
+            for (column = 0; column < columns; column++) {
+              var x = column * 28;
+              var y = row * 8;
+
+              if (row % 2) {
+                x += 14;
+              };
+
+              new Hexagon(x, y);
+            }
+          }
+        };
+
+        var show = function() {
+          document.querySelector('#disqus_thread').removeAttribute('hidden');
+        };
+
+        var watch = function() {
+          requestAnimationFrame(watch);
+
+          var width = cache.hexagons.clientWidth;
+          var height = cache.hexagons.clientHeight;
+
+          if (cache.width == width && cache.height == height) {
+            return;
+          }
+
+          cache.width = width;
+          cache.height = height;
+
+          render();
+        };
+
+        document.addEventListener('DOMContentLoaded', main);
+      }();
+    </script>
+  </body>
+</html>
