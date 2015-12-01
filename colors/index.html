@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Colors</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/lab/icon.png" rel="icon" type="image/png">
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body, html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        position: relative;
+        margin: 0;
+        min-width: 50rem;
+      }
+
+      button {
+        border: 0;
+        outline: 0;
+        padding: 0;
+      }
+
+      html {
+        font-family: sans-serif;
+        font-size: 16px;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      #content {
+        position: absolute;
+        top: 1rem;
+        right: calc(30% + 1rem);
+        bottom: 1rem;
+        left: 1rem;
+        background-color: rgb(236, 240, 241);
+        width: auto;
+        height: auto;
+      }
+
+      #disqus_thread {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        left: 70%;
+        width: auto;
+        height: auto;
+      }
+
+      .color {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 0;
+        box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0);
+        cursor: pointer;
+        transform: scale(1);
+        transition: border-radius 0.2s, box-shadow 0.2s, transform 0.2s;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+      }
+
+      .color__icon {
+        fill: rgba(0, 0, 0, 0);
+        transform: scale(0.2);
+        transition: fill 0.2s, transform 0.2s;
+        width: 2rem;
+        height: 2rem;
+      }
+
+      .colors {
+        display: block;
+        height: 100%;
+      }
+
+      .colors__color {
+        position: relative;
+        display: block;
+        float: left;
+        width: 20%;
+        height: 25%;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .color:hover {
+        border-radius: 2px;
+        box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.2);
+        transform: scale(1.1);
+        z-index: 10;
+      }
+
+      .color:hover .color__icon {
+        fill: rgba(0, 0, 0, 0.2);
+        transform: scale(1);
+      }
+
+      .color--turquoise {
+        background-color: rgb(26, 188, 156);
+      }
+
+      .color--emerald {
+        background-color: rgb(46, 204, 113);
+      }
+
+      .color--peter-river {
+        background-color: rgb(52, 152, 219);
+      }
+
+      .color--amethyst {
+        background-color: rgb(155, 89, 182);
+      }
+
+      .color--wet-asphalt {
+        background-color: rgb(52, 73, 94);
+      }
+
+      .color--green-sea {
+        background-color: rgb(22, 160, 133);
+      }
+
+      .color--nephritis {
+        background-color: rgb(39, 174, 96);
+      }
+
+      .color--belize-hole {
+        background-color: rgb(41, 128, 185);
+      }
+
+      .color--wisteria {
+        background-color: rgb(142, 68, 173);
+      }
+
+      .color--midnight-blue {
+        background-color: rgb(44, 62, 80);
+      }
+
+      .color--sun-flower {
+        background-color: rgb(241, 196, 15);
+      }
+
+      .color--carrot {
+        background-color: rgb(230, 126, 34);
+      }
+
+      .color--alizarin {
+        background-color: rgb(231, 76, 60);
+      }
+
+      .color--clouds {
+        background-color: rgb(236, 240, 241);
+      }
+
+      .color--concrete {
+        background-color: rgb(149, 165, 166);
+      }
+
+      .color--orange {
+        background-color: rgb(243, 156, 18);
+      }
+
+      .color--pumpkin {
+        background-color: rgb(211, 84, 0);
+      }
+
+      .color--pomegranate {
+        background-color: rgb(192, 57, 43);
+      }
+
+      .color--silver {
+        background-color: rgb(189, 195, 199);
+      }
+
+      .color--asbestos {
+        background-color: rgb(127, 140, 141);
+      }
+    </style>
+  </head>
+  <body>
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="hidden">
+      <symbol id="icon-clippy" viewBox="0 0 16 17">
+        <path d="M4,13 L8,13 L8,12 L4,12 L4,13 Z M9,6 L4,6 L4,7 L9,7 L9,6 Z M11,9 L11,7 L8,10 L11,13 L11,11 L16,11 L16,9 L11,9 Z M6.5,8 L4,8 L4,9 L6.5,9 L6.5,8 Z M4,11 L6.5,11 L6.5,10 L4,10 L4,11 Z M13,14 L3,14 L3,5 L13,5 L13,8 L14,8 L14,3 C13.9895833,2.71874859 13.8906259,2.48437594 13.703125,2.296875 C13.5156241,2.10937406 13.2812514,2.01041672 13,2 L10,2 C9.98958328,1.42708047 9.79687687,0.953126875 9.421875,0.578125 C9.04687312,0.203123125 8.57291953,0.0104167188 8,0 C7.42708047,0.0104167188 6.95312687,0.203123125 6.578125,0.578125 C6.20312313,0.953126875 6.01041672,1.42708047 6,2 L3,2 C2.71874859,2.01041672 2.48437594,2.10937406 2.296875,2.296875 C2.10937406,2.48437594 2.01041672,2.71874859 2,3 L2,14 C2.01041672,14.2812514 2.10937406,14.5156241 2.296875,14.703125 C2.48437594,14.8906259 2.71874859,14.9895833 3,15 L13,15 C13.2812514,14.9895833 13.5156241,14.8906259 13.703125,14.703125 C13.8906259,14.5156241 13.9895833,14.2812514 14,14 L14,12 L13,12 L13,14 Z M4,4 C4.01041672,3.71874859 4.10937406,3.48437594 4.296875,3.296875 C4.48437594,3.10937406 4.71874859,3.01041672 5,3 L6,3 C6.28125141,2.98958328 6.51562406,2.89062594 6.703125,2.703125 C6.89062594,2.51562406 6.98958328,2.28125141 7,2 C7.01041672,1.71874859 7.10937406,1.48437594 7.296875,1.296875 C7.48437594,1.10937406 7.71874859,1.015625 8,1.015625 C8.28125141,1.015625 8.51562406,1.10937406 8.703125,1.296875 C8.89062594,1.48437594 8.98958328,1.71874859 9,2 C9.01041672,2.28125141 9.10937406,2.51562406 9.296875,2.703125 C9.48437594,2.89062594 9.71874859,2.98958328 10,3 L11,3 C11.2812514,3.01041672 11.5156241,3.10937406 11.703125,3.296875 C11.8906259,3.48437594 11.9895833,3.71874859 12,4 L4,4 L4,4 Z"></path>
+      </symbol>
+    </svg>
+
+    <main id="content">
+      <ul class="colors">
+        <li class="colors__color">
+          <button class="color color--turquoise">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--emerald">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--peter-river">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--amethyst">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--wet-asphalt">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--green-sea">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--nephritis">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--belize-hole">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--wisteria">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--midnight-blue">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--sun-flower">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--carrot">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--alizarin">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--clouds">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--concrete">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--orange">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--pumpkin">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--pomegranate">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--silver">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+        <li class="colors__color">
+          <button class="color color--asbestos">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="color__icon">
+              <use xlink:href="#icon-clippy"></use>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </main>
+
+    <aside id="disqus_thread" hidden></aside>
+
+    <script>
+      /*!
+       * clipboard.js v1.5.5
+       * https://zenorocha.github.io/clipboard.js
+       *
+       * Licensed MIT © Zeno Rocha
+       */
+      !function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,r){function o(a,c){if(!n[a]){if(!e[a]){var s="function"==typeof require&&require;if(!c&&s)return s(a,!0);if(i)return i(a,!0);var u=new Error("Cannot find module '"+a+"'");throw u.code="MODULE_NOT_FOUND",u}var l=n[a]={exports:{}};e[a][0].call(l.exports,function(t){var n=e[a][1][t];return o(n?n:t)},l,l.exports,t,e,n,r)}return n[a].exports}for(var i="function"==typeof require&&require,a=0;a<r.length;a++)o(r[a]);return o}({1:[function(t,e,n){var r=t("matches-selector");e.exports=function(t,e,n){for(var o=n?t:t.parentNode;o&&o!==document;){if(r(o,e))return o;o=o.parentNode}}},{"matches-selector":2}],2:[function(t,e,n){function r(t,e){if(i)return i.call(t,e);for(var n=t.parentNode.querySelectorAll(e),r=0;r<n.length;++r)if(n[r]==t)return!0;return!1}var o=Element.prototype,i=o.matchesSelector||o.webkitMatchesSelector||o.mozMatchesSelector||o.msMatchesSelector||o.oMatchesSelector;e.exports=r},{}],3:[function(t,e,n){function r(t,e,n,r){var i=o.apply(this,arguments);return t.addEventListener(n,i),{destroy:function(){t.removeEventListener(n,i)}}}function o(t,e,n,r){return function(n){n.delegateTarget=i(n.target,e,!0),n.delegateTarget&&r.call(t,n)}}var i=t("closest");e.exports=r},{closest:1}],4:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.function=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],5:[function(t,e,n){function r(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!c.string(e))throw new TypeError("Second argument must be a String");if(!c.function(n))throw new TypeError("Third argument must be a Function");if(c.node(t))return o(t,e,n);if(c.nodeList(t))return i(t,e,n);if(c.string(t))return a(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function o(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function i(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function a(t,e,n){return s(document.body,t,e,n)}var c=t("./is"),s=t("delegate");e.exports=r},{"./is":4,delegate:3}],6:[function(t,e,n){function r(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),r=document.createRange();r.selectNodeContents(t),n.removeAllRanges(),n.addRange(r),e=n.toString()}return e}e.exports=r},{}],7:[function(t,e,n){function r(){}r.prototype={on:function(t,e,n){var r=this.e||(this.e={});return(r[t]||(r[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function r(){o.off(t,r),e.apply(n,arguments)}var o=this;return r._=e,this.on(t,r,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),r=0,o=n.length;for(r;o>r;r++)n[r].fn.apply(n[r].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),r=n[t],o=[];if(r&&e)for(var i=0,a=r.length;a>i;i++)r[i].fn!==e&&r[i].fn._!==e&&o.push(r[i]);return o.length?n[t]=o:delete n[t],this}},e.exports=r},{}],8:[function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}n.__esModule=!0;var i=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),a=t("select"),c=r(a),s=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){if(this.text&&this.target)throw new Error('Multiple attributes declared, use either "target" or "text"');if(this.text)this.selectFake();else{if(!this.target)throw new Error('Missing required attributes, use either "target" or "text"');this.selectTarget()}},t.prototype.selectFake=function t(){var e=this;this.removeFake(),this.fakeHandler=document.body.addEventListener("click",function(){return e.removeFake()}),this.fakeElem=document.createElement("textarea"),this.fakeElem.style.position="absolute",this.fakeElem.style.left="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=c.default(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click"),this.fakeHandler=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=c.default(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},i(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!=typeof e||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');this._target=e}},get:function t(){return this._target}}]),t}();n.default=s,e.exports=n.default},{select:6}],9:[function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function i(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function a(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}n.__esModule=!0;var c=t("./clipboard-action"),s=r(c),u=t("tiny-emitter"),l=r(u),f=t("good-listener"),d=r(f),h=function(t){function e(n,r){o(this,e),t.call(this),this.resolveOptions(r),this.listenClick(n)}return i(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=d.default(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new s.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return a("action",e)},e.prototype.defaultTarget=function t(e){var n=a("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return a("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(l.default);n.default=h,e.exports=n.default},{"./clipboard-action":8,"good-listener":5,"tiny-emitter":7}]},{},[9])(9)});
+    </script>
+
+    <script>
+      !function() {
+        var bind = function() {
+          new Clipboard('.color', {
+            text: function(color) {
+              return getComputedStyle(color).backgroundColor;
+            }
+          });
+        };
+
+        var disqus = function() {
+          var script = document.createElement('script');
+
+          script.addEventListener('load', show);
+          script.setAttribute('data-timestamp', Date.now());
+          script.setAttribute('src', '//gibatronic-lab.disqus.com/embed.js');
+
+          document.body.appendChild(script);
+        };
+
+        window.disqus_config = function() {
+          var pathname = location.pathname;
+
+          this.page.url = 'https://' + location.host + location.pathname;
+          this.page.identifier = pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-');
+        };
+
+        var main = function() {
+          bind();
+          disqus();
+        };
+
+        var show = function() {
+          document.querySelector('#disqus_thread').removeAttribute('hidden');
+        };
+
+        document.addEventListener('DOMContentLoaded', main);
+      }();
+    </script>
+  </body>
+</html>
