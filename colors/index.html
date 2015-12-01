@@ -9,61 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="/lab/icon.png" rel="icon" type="image/png">
+    <link href="/lab/main.css" rel="stylesheet">
 
     <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      body, html {
-        width: 100%;
-        height: 100%;
-      }
-
-      body {
-        position: relative;
-        margin: 0;
-        min-width: 50rem;
-      }
-
-      button {
-        border: 0;
-        outline: 0;
-        padding: 0;
-      }
-
-      html {
-        font-family: sans-serif;
-        font-size: 16px;
-      }
-
-      ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      #content {
-        position: absolute;
-        top: 1rem;
-        right: calc(30% + 1rem);
-        bottom: 1rem;
-        left: 1rem;
-        background-color: rgb(236, 240, 241);
-        width: auto;
-        height: auto;
-      }
-
-      #disqus_thread {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        bottom: 1rem;
-        left: 70%;
-        width: auto;
-        height: auto;
-      }
-
       .color {
         position: absolute;
         top: 0;
@@ -97,10 +45,6 @@
         float: left;
         width: 20%;
         height: 25%;
-      }
-
-      .hidden {
-        display: none;
       }
 
       .color:hover {
@@ -197,7 +141,7 @@
     </style>
   </head>
   <body>
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="hidden">
+    <svg version="1.1" hidden xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <symbol id="icon-clippy" viewBox="0 0 16 17">
         <path d="M4,13 L8,13 L8,12 L4,12 L4,13 Z M9,6 L4,6 L4,7 L9,7 L9,6 Z M11,9 L11,7 L8,10 L11,13 L11,11 L16,11 L16,9 L11,9 Z M6.5,8 L4,8 L4,9 L6.5,9 L6.5,8 Z M4,11 L6.5,11 L6.5,10 L4,10 L4,11 Z M13,14 L3,14 L3,5 L13,5 L13,8 L14,8 L14,3 C13.9895833,2.71874859 13.8906259,2.48437594 13.703125,2.296875 C13.5156241,2.10937406 13.2812514,2.01041672 13,2 L10,2 C9.98958328,1.42708047 9.79687687,0.953126875 9.421875,0.578125 C9.04687312,0.203123125 8.57291953,0.0104167188 8,0 C7.42708047,0.0104167188 6.95312687,0.203123125 6.578125,0.578125 C6.20312313,0.953126875 6.01041672,1.42708047 6,2 L3,2 C2.71874859,2.01041672 2.48437594,2.10937406 2.296875,2.296875 C2.10937406,2.48437594 2.01041672,2.71874859 2,3 L2,14 C2.01041672,14.2812514 2.10937406,14.5156241 2.296875,14.703125 C2.48437594,14.8906259 2.71874859,14.9895833 3,15 L13,15 C13.2812514,14.9895833 13.5156241,14.8906259 13.703125,14.703125 C13.8906259,14.5156241 13.9895833,14.2812514 14,14 L14,12 L13,12 L13,14 Z M4,4 C4.01041672,3.71874859 4.10937406,3.48437594 4.296875,3.296875 C4.48437594,3.10937406 4.71874859,3.01041672 5,3 L6,3 C6.28125141,2.98958328 6.51562406,2.89062594 6.703125,2.703125 C6.89062594,2.51562406 6.98958328,2.28125141 7,2 C7.01041672,1.71874859 7.10937406,1.48437594 7.296875,1.296875 C7.48437594,1.10937406 7.71874859,1.015625 8,1.015625 C8.28125141,1.015625 8.51562406,1.10937406 8.703125,1.296875 C8.89062594,1.48437594 8.98958328,1.71874859 9,2 C9.01041672,2.28125141 9.10937406,2.51562406 9.296875,2.703125 C9.48437594,2.89062594 9.71874859,2.98958328 10,3 L11,3 C11.2812514,3.01041672 11.5156241,3.10937406 11.703125,3.296875 C11.8906259,3.48437594 11.9895833,3.71874859 12,4 L4,4 L4,4 Z"></path>
       </symbol>
@@ -348,8 +292,6 @@
       </ul>
     </main>
 
-    <aside id="disqus_thread" hidden></aside>
-
     <script>
       /*!
        * clipboard.js v1.5.5
@@ -362,7 +304,9 @@
 
     <script>
       !function() {
-        var bind = function() {
+        'use strict';
+
+        var main = function() {
           new Clipboard('.color', {
             text: function(color) {
               return getComputedStyle(color).backgroundColor;
@@ -370,34 +314,10 @@
           });
         };
 
-        var disqus = function() {
-          var script = document.createElement('script');
-
-          script.addEventListener('load', show);
-          script.setAttribute('data-timestamp', Date.now());
-          script.setAttribute('src', '//gibatronic-lab.disqus.com/embed.js');
-
-          document.body.appendChild(script);
-        };
-
-        window.disqus_config = function() {
-          var pathname = location.pathname;
-
-          this.page.url = 'https://' + location.host + location.pathname;
-          this.page.identifier = pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-');
-        };
-
-        var main = function() {
-          bind();
-          disqus();
-        };
-
-        var show = function() {
-          document.querySelector('#disqus_thread').removeAttribute('hidden');
-        };
-
         document.addEventListener('DOMContentLoaded', main);
       }();
     </script>
+
+    <script async defer src="/lab/disqus.js"></script>
   </body>
 </html>
